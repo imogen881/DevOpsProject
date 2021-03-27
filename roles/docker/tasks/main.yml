@@ -1,5 +1,5 @@
 ---
-- name: Install dependencies
+- name: Install Docker dependencies
   apt:
     pkg:
     - apt-transport-https
@@ -28,3 +28,8 @@
     name: ubuntu
     groups: docker
     append: yes
+- name: Install latest Docker-Compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.28.6/docker-compose-Linux-{{ ansible_machine }}
+    dest: /usr/local/bin/docker-compose
+    mode: '777'
