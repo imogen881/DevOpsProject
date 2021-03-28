@@ -1,15 +1,10 @@
 pipeline {
     agent any
     environment {
-        MYSQL_ROOT_PASSWORD = credentials("MYSQL_ROOT_PASSWORD")
-        DOCKER_PASSWORD = credentials("DOCKER_PASSWORD")
+        DATABASE_URI = credentials("DATABASE_URI")
+        SECRET_KEY = credentials("SECRET_KEY")
     }
     stages {
-        stage("Install Dependencies"){
-            steps {
-                sh "ansible-playbook -i inventory.yaml playbook.yaml"
-            }
-        }
         stage("Build"){
             steps {
                 sh "docker-compose build --parallel"
