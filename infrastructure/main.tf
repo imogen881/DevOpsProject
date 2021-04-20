@@ -33,3 +33,25 @@ module "ec2" {
   sql_sg_id         = module.vpc.sql_sg_id
   database_password = var.database_password
 }
+
+resource "local_file" "ansible_inventory" {
+  content  = <<-DOC
+    all:
+      children:
+        jenkins:
+          hosts:
+            ${module.ec2.jenkins_public_ip}
+        prod:
+          hosts:
+            ${module.ec2.prod_public_ip}
+        test:
+          hosts:
+            ${module.ec2.test_public_ip}
+      vars:
+        ansible_ssh_private_key_file: "~/.ssh/ssh-aws-key"
+        ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+        ansible_user: ubuntu
+
+    DOC
+  filename = "../inventory.yaml"
+}
