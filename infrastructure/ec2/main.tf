@@ -49,9 +49,9 @@ resource "aws_instance" "jenkins" {
 
 }
 
-resource "aws_db_instance" "database" {
-  identifier             = "database"
-  name                   = "database"
+resource "aws_db_instance" "sqldatabase" {
+  identifier             = "sqldatabase"
+  name                   = "sqldatabase"
   allocated_storage      = 10
   engine                 = "mysql"
   engine_version         = "5.7"
