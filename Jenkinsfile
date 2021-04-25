@@ -8,7 +8,7 @@ pipeline{
     stages{
         stage('Build'){
             steps {
-                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.74.1.255 -oStrictHostKeyChecking=no  << EOF
+                sh '''ssh -T ubuntu@54.74.1.255 -oStrictHostKeyChecking=no  << EOF
                       cd DevOpsProject
                       export DATABASE_URI=$DATABASE_URI
                       export SECRET_KEY=$SECRET_KEY
@@ -18,7 +18,7 @@ EOF'''
         }
         stage('Deploy'){
             steps {
-                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.74.1.255 -oStrictHostKeyChecking=no  << EOF
+                sh '''ssh -T ubuntu@54.74.1.255 -oStrictHostKeyChecking=no  << EOF
                       cd DevOpsProject
                       export DATABASE_URI=$DATABASE_URI
                       export SECRET_KEY=$SECRET_KEY
