@@ -8,16 +8,12 @@ pipeline{
     stages{
         stage('Build'){
             steps {
-                sh '''cd DevOpsProject  << EOF
-                      docker-compose build --parallel
-EOF'''
+                sh 'docker-compose build --parallel'
             }
         }
         stage('Deploy'){
             steps {
-                sh '''cd DevOpsProject  << EOF
-                      docker-compose up -d
-EOF'''
+                sh 'docker-compose up -d'
             }
         }
     }
