@@ -1,29 +1,44 @@
-pipeline {
+pipeline{
     agent any
     environment {
         DATABASE_URI = credentials("DATABASE_URI")
         SECRET_KEY = credentials("SECRET_KEY")
         DOCKER_PASSWORD = credentials("DOCKER_PASSWORD")
     }
-    stages {
-        stage("Install Dependencies"){
+    stages{
+        stage('Clean up workspace'){
             steps {
-                sh "bash installDependencies.sh"
+                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.154.218.99 -oStrictHostKeyChecking=no  << EOF
+                      rm -r jdayih_assessment
+                      docker system prune -a -f
+EOF'''
             }
         }
-        stage("Build"){
+        stage('Clone repo'){
             steps {
-                sh "docker-compose build --parallel"
+                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.154.218.99 -oStrictHostKeyChecking=no  << EOF
+                      git clone --branch dev git@github.com:QACTrainers/jdayih_assessment.git
+EOF'''
             }
         }
-        stage("Push"){
+        stage('Build'){
             steps {
-                sh "docker-compose push"
+                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.154.218.99 -oStrictHostKeyChecking=no  << EOF
+                      cd jdayih_assessment
+                      export DATABASE_URI=$DATABASE_URI
+                      export SECRET_KEY=$SECRET_KEY
+                      docker-compose build --parallel
+EOF'''
             }
         }
-        stage("Deploy"){
+        stage('Deploy'){
             steps {
-                sh "docker-compose up -d"
+                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.154.218.99 -oStrictHostKeyChecking=no  << EOF
+                      cd jdayih_assessment
+                      export DATABASE_URI=$DATABASE_URI
+                      export SECRET_KEY=$SECRET_KEY
+                      docker-compose up -d
+EOF'''
             }
         }
     }
