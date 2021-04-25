@@ -6,24 +6,16 @@ pipeline{
         DOCKER_PASSWORD = credentials("DOCKER_PASSWORD")
     }
     stages{
-        stage('Clean up workspace'){
-            steps {
-                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.154.218.99 -oStrictHostKeyChecking=no  << EOF
-                      rm -r jdayih_assessment
-                      docker system prune -a -f
-EOF'''
-            }
-        }
         stage('Clone repo'){
             steps {
-                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.154.218.99 -oStrictHostKeyChecking=no  << EOF
+                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.74.1.255 -oStrictHostKeyChecking=no  << EOF
                       git clone --branch dev git@github.com:QACTrainers/jdayih_assessment.git
 EOF'''
             }
         }
         stage('Build'){
             steps {
-                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.154.218.99 -oStrictHostKeyChecking=no  << EOF
+                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.74.1.255 -oStrictHostKeyChecking=no  << EOF
                       cd jdayih_assessment
                       export DATABASE_URI=$DATABASE_URI
                       export SECRET_KEY=$SECRET_KEY
@@ -33,7 +25,7 @@ EOF'''
         }
         stage('Deploy'){
             steps {
-                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.154.218.99 -oStrictHostKeyChecking=no  << EOF
+                sh '''ssh -T -i '/home/jenkins/.ssh/id_rsa' ubuntu@54.74.1.255 -oStrictHostKeyChecking=no  << EOF
                       cd jdayih_assessment
                       export DATABASE_URI=$DATABASE_URI
                       export SECRET_KEY=$SECRET_KEY
